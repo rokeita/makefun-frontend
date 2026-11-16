@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>make.fun bounties — a fast, open frontend</title>
+<meta name="description" content="A fast, accessible, open-source frontend for make.fun bounties: the live board, bounty pages, leaderboards and profiles, on make.fun's public API.">
+<style>
+:root{--ink:#191919;--muted:#5a5a5a;--line:#e3e3e3;--link:#0b5cad;--pot:#0a6e3c;--warn:#9a3d00;--bg:#fff;--chip:#f2f2f2}
+*{box-sizing:border-box}
+body{margin:0 auto;max-width:1024px;padding:0 16px 48px;font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+.skip{position:absolute;left:-999px;top:0;background:var(--ink);color:#fff;padding:8px 12px;z-index:2}
+.skip:focus{left:8px;top:8px}
+a{color:var(--link)}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--link);outline-offset:2px}
+header{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;padding:14px 0;border-bottom:2px solid var(--ink)}
+.brand{font-weight:800;font-size:1.15em;color:var(--ink);text-decoration:none}
+.brand span{font-weight:400;color:var(--muted)}
+nav a{margin-right:14px}
+h1{font-size:1.6em;line-height:1.25;margin:.7em 0 .3em}
+h2{font-size:1.2em;margin:1.4em 0 .4em}
+.lede{color:var(--muted);max-width:62ch}
+.muted{color:var(--muted)}
+.board{list-style:none;padding:0;margin:0}
+.row{padding:12px 0;border-bottom:1px solid var(--line)}
+.row-title{font-weight:600}
+.row-title a{text-decoration:none}
+.row-title a:hover{text-decoration:underline}
+.row-meta{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:4px;color:var(--muted);font-size:.92em}
+.pot{font-weight:700;color:var(--pot)}
+.cat,.tag,.badge{display:inline-block;background:var(--chip);border-radius:999px;padding:1px 9px;font-size:.8em;font-weight:600;color:var(--muted);margin-left:6px;vertical-align:1px}
+.badge.closing{background:#fdeeda;color:var(--warn)}
+.badge.ended{background:#fde8e8;color:#8c1d1d}
+.badge.open{background:#e2f3e8;color:var(--pot)}
+.controls{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end;margin:14px 0 4px}
+.controls label{font-size:.9em;font-weight:600}
+.controls input,.controls select{font:inherit;font-weight:400;padding:6px 8px;border:1px solid #999;border-radius:6px;background:#fff}
+.controls input[type=search]{min-width:220px}
+button,.button{font:inherit;cursor:pointer;padding:7px 14px;border:1px solid var(--ink);border-radius:6px;background:var(--ink);color:#fff;text-decoration:none;display:inline-block}
+button:hover,.button:hover{background:#333}
+.facts{display:grid;grid-template-columns:max-content 1fr;gap:6px 18px;margin:14px 0}
+.facts dt{font-weight:700}
+.facts dd{margin:0}
+.description{white-space:pre-wrap;max-width:70ch}
+table{border-collapse:collapse;width:100%;margin:12px 0}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{position:sticky;top:0;background:#fff;border-bottom:2px solid var(--ink)}
+.leader td:nth-child(1),.leader td:nth-child(4),.leader td:nth-child(5),.leader td:nth-child(6){white-space:nowrap}
+.rewards{max-width:420px}
+.profile-head{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.profile-head img{border-radius:50%;border:1px solid var(--line)}
+.stats{grid-template-columns:repeat(4,max-content);gap:6px 28px}
+.solutions{list-style:none;padding:0}
+.solutions li{padding:9px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.solutions span{color:var(--muted);font-size:.92em}
+.lookup{margin-top:28px;padding-top:4px;border-top:1px solid var(--line)}
+.lookup form{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.lookup input{font:inherit;padding:6px 8px;border:1px solid #999;border-radius:6px}
+footer{margin-top:36px;padding-top:12px;border-top:1px solid var(--line);color:var(--muted);font-size:.9em}
+@media (max-width:640px){
+  body{padding:0 12px 40px}
+  h1{font-size:1.35em}
+  .row-meta{gap:2px 14px}
+  .facts{grid-template-columns:1fr;gap:2px}
+  .facts dd{margin-bottom:8px}
+  .stats{grid-template-columns:repeat(2,max-content)}
+  .leader{font-size:.9em}
+  .leader td:nth-child(3){max-width:140px;overflow:hidden;text-overflow:ellipsis}
+}
+</style>
+<script type="module">
+// Boot: load the app after the first paint, so the first load stays this page.
+window.__shotReady = false;
+import('./app.js').catch(() => {
+  const main = document.getElementById('app');
+  if (main) main.innerHTML = '<p role="alert">Could not load the app. Please reload the page.</p>';
+  window.__shotReady = true;
+});
+</script>
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+<header>
+  <a class="brand" href="#/">make.fun <span>bounties</span></a>
+  <nav aria-label="Main"><a href="#/">Board</a><a href="#/bounty/makefun-frontend-01">This bounty</a></nav>
+</header>
+<main id="app" tabindex="-1"><p role="status">Loading…</p></main>
+<footer><p>Unofficial open-source client for make.fun (MIT). Data comes from make.fun's public API, read-only. <span id="reqs"></span></p></footer>
+</body>
+</html>
